@@ -85,9 +85,9 @@ body.photo .top{background:var(--panel);border-radius:14px;padding:14px 18px}
   <div id="p" hidden>
     <h3>Choose what shows up. To move a card, drag its ⋮⋮ handle or use the arrows.</h3>
     <div class="l"></div>
-    <div class="set"><label class="f">Location<input id="loc" type="text" placeholder="City name" autocomplete="off"></label><label class="f">Finnhub API key (for stocks)<input id="key" type="password" autocomplete="off"></label><label class="f">Theme<select id="theme"><option value="auto">Match my device</option><option value="light">Light</option><option value="dark">Dark</option><option value="black">Black</option></select></label><label class="f">Random scenic background<input id="ph" type="checkbox"></label><label class="f" style="align-items:flex-start">Your own photo links, one per line (optional)<textarea id="urls" style="width:230px;min-height:70px" placeholder="https://..."></textarea></label><p class="src">With the picture on, a new one loads each time you press Refresh. Without your own links, pictures come from picsum.photos, which are random stock photos and not always scenic.</p>
+    <div class="set"><label class="f">Location<input id="loc" type="text" placeholder="City name" autocomplete="off"></label><label class="f">Finnhub API key (for stocks)<input id="key" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></label><label class="f">Theme<select id="theme"><option value="auto">Match my device</option><option value="light">Light</option><option value="dark">Dark</option><option value="black">Black</option></select></label><label class="f">Random scenic background<input id="ph" type="checkbox"></label><label class="f" style="align-items:flex-start">Your own photo links, one per line (optional)<textarea id="urls" style="width:230px;min-height:70px" placeholder="https://..."></textarea></label><p class="src">With the picture on, a new one loads each time you press Refresh. Without your own links, pictures come from picsum.photos, which are random stock photos and not always scenic.</p>
 <div class="acts" style="margin:8px 0 4px"><button type="button" id="bgdir">Choose background folder</button><button type="button" id="bgoff">Use online pictures</button></div><p class="src">Use pictures from a folder on your computer. Chrome or Edge only. The pictures stay on your computer, and your browser may ask permission again after you restart it.</p>
-<label class="f">EIA API key (for energy prices)<input id="eiakey" type="password" autocomplete="off"></label><p class="src">Get free keys at finnhub.io (stocks) and eia.gov/opendata (energy). They stay in this browser only.</p></div>
+<label class="f">EIA API key (for energy prices)<input id="eiakey" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></label><p class="src">Get free keys at finnhub.io (stocks) and eia.gov/opendata (energy). They stay in this browser only.</p></div>
   </div>
   <div id="g"></div>
 </main>
@@ -175,8 +175,8 @@ document.addEventListener("change",e=>{
   else if(t.id==="ph"){S.photo=t.checked;save();look();return}
   else if(t.id==="urls"){S.urls=t.value;save();look();return}
   else if(t.id==="loc"){const q=t.value.trim();if(q&&q!==S.loc.name)geo(q);return}
-  else if(t.id==="key"){S.key=t.value.trim();save();return}
-  else if(t.id==="eiakey"){S.eia=t.value.trim();save();return}
+  else if(t.id==="key"){S.key=t.value.trim();save();say(S.key?"Finnhub key saved ("+S.key.length+" characters).":"Finnhub key cleared.");return}
+  else if(t.id==="eiakey"){S.eia=t.value.trim();save();say(S.eia?"EIA key saved ("+S.eia.length+" characters).":"EIA key cleared.");return}
   else if(t.dataset.t){S.hidden=t.checked?S.hidden.filter(x=>x!==t.dataset.t):[...S.hidden,t.dataset.t]}
   else if(t.dataset.k){const v=parseFloat(t.value);if(isNaN(v)||v<0)return;S[t.dataset.k]=v}
   else if(t.dataset.cd){S.cd[t.dataset.cd]=t.value}
@@ -300,15 +300,15 @@ async function refresh(){
     (async()=>{
       if(!S.eia){bad.push("energy prices (add a free EIA key in Customize)");return}
       const items=EN.filter(x=>S.en.includes(x.id));if(!items.length)return;
-      SNAP.en=SNAP.en||{};let ok=0;
+      SNAP.en=SNAP.en||{};let ok=0,why="";
       await Promise.all(items.map(async x=>{try{
         const q=new URLSearchParams([["api_key",S.eia],["frequency",x.f],["data[0]","value"],["facets[series][]",x.s],["sort[0][column]","period"],["sort[0][direction]","desc"],["length","2"]]);
         const d=await J("https://api.eia.gov/v2/"+x.r+"/data/?"+q),a=d.response.data.map(r=>({d:r.period,v:parseFloat(r.value)})).filter(r=>r.v>0);
         if(!a.length)throw new Error("none");
         SNAP.en[x.id]={v:a[0].v,c:a[1]?a[0].v-a[1].v:0,d:a[0].d};ok++;
-      }catch(e){}}));
+      }catch(e){why=why||String(e.message)}}));
       if(ok)SNAP.enAt=t;
-      if(ok<items.length)bad.push(ok?"some energy prices":"energy prices");
+      if(ok<items.length){const r=!why?"":/^(400|401|403)$/.test(why)?"EIA rejected the key":why==="none"?"EIA had no data for it":/^\d+$/.test(why)?"EIA error "+why:"the browser couldn’t reach EIA";bad.push((ok?"some energy prices":"energy prices")+(r?" ("+r+")":""))}
     })()
   ]);
   S.snap={wx:SNAP.wx,wxAt:SNAP.wxAt,metalAt:SNAP.metalAt,ytd:SNAP.ytd,nws:SNAP.nws,nwsAt:SNAP.nwsAt,votd:SNAP.votd,votdAt:SNAP.votdAt,en:SNAP.en,enAt:SNAP.enAt};if(S.photo){if(S.dirOn&&BG.files.length)await pick();else S.seed=urlList().length?S.seed+1:Math.floor(Math.random()*1e6)}save();render();look();
