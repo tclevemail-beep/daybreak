@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daybreak</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1d3557">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Daybreak">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#e8ecef;--panel:#fff;--ink:#18212b;--mute:#5b6773;--line:#d3dae0;--accent:#0e6e6e;--silver:#7d8a96;--gold:#a8730a;--down:#b3402f;--up:#1f7a4d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a21;--panel:#1d252e;--ink:#e7ecf0;--mute:#97a3ae;--line:#2e3944;--accent:#4fc1b8;--silver:#b4c0cb;--gold:#e0a93b;--down:#e57a68;--up:#5fc592}}
+:root[data-theme="black"]{--bg:#000;--panel:#0d0f12;--ink:#eef2f5;--mute:#9aa6b0;--line:#222a31;--accent:#4fc1b8;--silver:#b4c0cb;--gold:#e0a93b;--down:#e57a68;--up:#5fc592}
+:root[data-theme="dark"]{--bg:#141a21;--panel:#1d252e;--ink:#e7ecf0;--mute:#97a3ae;--line:#2e3944;--accent:#4fc1b8;--silver:#b4c0cb;--gold:#e0a93b;--down:#e57a68;--up:#5fc592}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1100px;margin:0 auto;padding:28px 18px 48px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{margin:0;font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.top p{margin:4px 0 0;color:var(--mute)}
+button{font:inherit;cursor:pointer;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+button:hover{border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#p{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:18px}
+#p h3{margin:0 0 8px;font-size:15px}
+#p .l{display:flex;flex-wrap:wrap;gap:6px 18px}
+#p label{display:flex;gap:6px;align-items:center}
+#g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;align-items:start}
+.w{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.w:nth-child(3n+1){border-radius:14px 4px 14px 4px}
+.wide{grid-column:span 2}
+@media (max-width:620px){.wide{grid-column:auto}}
+.w header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.w h2{margin:0;font-size:15px;font-weight:600;color:var(--mute)}
+.w header button{padding:2px 8px;margin-left:4px}
+.big{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.big small{font-size:14px;font-weight:400;color:var(--mute);margin-left:8px;letter-spacing:0}
+.src{margin:10px 0 0;font-size:13px;color:var(--mute)}
+.bar{position:relative;height:6px;border-radius:3px;background:var(--line);margin:16px 0 6px}
+.bar u{position:absolute;top:-5px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--silver);border:3px solid var(--panel)}
+.rng{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+.gold .big{color:var(--gold)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.days div{display:flex;flex-direction:column;align-items:center;padding:8px 2px;border-radius:8px;background:var(--bg)}
+.days span{font-weight:600}.days em{font-style:normal;color:var(--mute)}.days i{font-style:normal;font-size:12px;color:var(--accent)}
+.row{display:grid;grid-template-columns:1fr auto auto 28px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.up{color:var(--up)}.dn{color:var(--down)}
+.row em{font-style:normal;min-width:56px;text-align:right}
+.row button{padding:0 6px;border:0;color:var(--mute)}
+form{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+form input{flex:1 1 70px}
+.f{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 8px;font-size:14px;color:var(--mute)}
+.f input{width:110px}
+textarea{width:100%;min-height:130px;resize:vertical}
+a.btn{font:inherit;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;text-decoration:none}a.btn:hover{border-color:var(--accent)}
+#p .set{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;max-width:540px}.set .f input{width:230px}
+.hit{background:var(--down);color:var(--bg);border-radius:8px;padding:8px 10px;margin:0 0 10px;font-weight:600}
+.al{border-left:4px solid var(--down);padding:4px 10px;margin-bottom:8px}.row.td{grid-template-columns:1fr 28px}.row.td label{display:flex;gap:8px;align-items:center}.dn2{text-decoration:line-through;color:var(--mute)}.sr{margin-top:0}
+body.photo{background-size:cover;background-position:center;background-attachment:fixed}
+body.photo .top{background:var(--panel);border-radius:14px;padding:14px 18px}
+.set .f select{width:230px}.set .f input[type=checkbox]{width:auto}
+.grab{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;padding:2px 8px;margin-right:8px;border:1px solid var(--line);border-radius:6px;color:var(--mute);letter-spacing:-2px;font-weight:700}
+.w.lift{opacity:.85;outline:2px solid var(--accent);z-index:2}
+.vs{margin:0;font-size:20px;line-height:1.5}
+.row.en{grid-template-columns:1fr auto auto 64px}.row.en small{color:var(--mute)}.row.en .d{font-size:13px;color:var(--mute);text-align:right}
+.acts{display:flex;gap:8px;flex-wrap:wrap}#st{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--mute)}
+.radar iframe{width:100%;height:380px;border:1px solid var(--line);border-radius:10px;margin-top:6px;background:var(--bg)}.radar a{color:var(--accent)}.src+button{margin-top:10px}button:disabled{opacity:.6;cursor:wait}
+@media (pointer:coarse){button,input,select{min-height:42px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div><h1 id="hd">Today</h1><p id="sub"></p><p id="st" role="status"></p></div>
+    <div class="acts"><button id="rf">Refresh numbers</button><button id="bk" aria-pressed="false">Black background</button><button id="ed" aria-expanded="false">Customize</button></div>
+  </div>
+  <div id="p" hidden>
+    <h3>Choose what shows up. To move a card, drag its ⋮⋮ handle or use the arrows.</h3>
+    <div class="l"></div>
+    <div class="set"><label class="f">Location<input id="loc" type="text" placeholder="City name" autocomplete="off"></label><label class="f">Finnhub API key (for stocks)<input id="key" type="password" autocomplete="off"></label><label class="f">Theme<select id="theme"><option value="auto">Match my device</option><option value="light">Light</option><option value="dark">Dark</option><option value="black">Black</option></select></label><label class="f">Random scenic background<input id="ph" type="checkbox"></label><label class="f" style="align-items:flex-start">Your own photo links, one per line (optional)<textarea id="urls" style="width:230px;min-height:70px" placeholder="https://..."></textarea></label><p class="src">With the picture on, a new one loads each time you press Refresh. Without your own links, pictures come from picsum.photos, which are random stock photos and not always scenic.</p>
+<div class="acts" style="margin:8px 0 4px"><button type="button" id="bgdir">Choose background folder</button><button type="button" id="bgoff">Use online pictures</button></div><p class="src">Use pictures from a folder on your computer. Chrome or Edge only. The pictures stay on your computer, and your browser may ask permission again after you restart it.</p>
+<label class="f">EIA API key (for energy prices)<input id="eiakey" type="password" autocomplete="off"></label><p class="src">Get free keys at finnhub.io (stocks) and eia.gov/opendata (energy). They stay in this browser only.</p></div>
+  </div>
+  <div id="g"></div>
+</main>
+<script>
+const SNAP={at:"Oct 16, 2026",silver:57.91,gold:4190,low:54.77,hi:59.37,ytd:-18.5,
+wx:{now:61,txt:"Partly sunny",days:[["Fri",62,38,10],["Sat",60,37,0],["Sun",66,40,0],["Mon",69,45,5],["Tue",73,49,10],["Wed",79,54,0],["Thu",82,58,0]]}};
+const KEYS=["weather","verse","nws","briefing","silver","gold","alerts","stack","stocks","energy","planner","dates","todo","search","claude","countdown","notes","clock"];
+let S={order:[...KEYS],hidden:["countdown","notes","clock"],silver:SNAP.silver,gold:SNAP.gold,prem:10,budget:500,stocks:[],cd:{label:"",date:""},notes:"",edit:false,radar:false,brief:false,vpv:false,loc:{name:"Oklahoma City",lat:35.4676,lon:-97.5164},key:"",eia:"",en:["wti","brent","ng","gas","dsl"],theme:"auto",photo:false,dirOn:false,seed:1,urls:"",stack:[],alert:{lo:"",hi:""},dates:[{l:"Fed meeting ends",d:"2026-10-28"}],todos:[]};
+try{const o=JSON.parse(localStorage.getItem("dash-local-v1")||"null");if(o)S=Object.assign(S,o,{edit:false,radar:false,brief:false,vpv:false});if(S.snap)Object.assign(SNAP,S.snap)}catch(e){}
+KEYS.forEach(k=>{if(!S.order.includes(k))S.order.push(k)});
+const save=()=>{try{localStorage.setItem("dash-local-v1",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const RADAR=()=>"https://web.weatherwise.app/#map=6/"+(+S.loc.lat).toFixed(2)+"/"+(+S.loc.lon).toFixed(2);
+const EN=[
+{id:"wti",n:"WTI crude oil",u:"/bbl",r:"petroleum/pri/spt",s:"RWTC",f:"daily"},
+{id:"brent",n:"Brent crude oil",u:"/bbl",r:"petroleum/pri/spt",s:"RBRTE",f:"daily"},
+{id:"ng",n:"Natural gas (Henry Hub)",u:"/MMBtu",r:"natural-gas/pri/fut",s:"RNGWHHD",f:"daily"},
+{id:"gas",n:"Gasoline, US regular",u:"/gal",r:"petroleum/pri/gnd",s:"EMM_EPMR_PTE_NUS_DPG",f:"weekly"},
+{id:"dsl",n:"Diesel, US",u:"/gal",r:"petroleum/pri/gnd",s:"EMD_EPD2D_PTE_NUS_DPG",f:"weekly"},
+{id:"gasm",n:"Gasoline, Midwest regular",u:"/gal",r:"petroleum/pri/gnd",s:"EMM_EPMR_PTE_R20_DPG",f:"weekly"},
+{id:"dslm",n:"Diesel, Midwest",u:"/gal",r:"petroleum/pri/gnd",s:"EMD_EPD2D_PTE_R20_DPG",f:"weekly"},
+{id:"ho",n:"Heating oil, NY Harbor",u:"/gal",r:"petroleum/pri/spt",s:"EER_EPD2F_PF4_Y35NY_DPG",f:"daily"}
+];
+const inp=(k,v,l)=>`<label class="f">${l}<input type="number" step="0.01" min="0" value="${v}" data-k="${k}"></label>`;
+const W={
+weather:{get t(){return S.loc.name+" weather"},wide:1,h:()=>`<div class="big">${SNAP.wx.now}°F<small>${SNAP.wx.txt}</small></div><div class="days">${SNAP.wx.days.map(d=>`<div><b>${d[0]}</b><span>${d[1]}°</span><em>${d[2]}°</em><i>${d[3]}%</i></div>`).join("")}</div><p class="src">Forecast as of ${SNAP.wxAt||SNAP.at}. Highs on top, lows below, chance of rain at the bottom.</p><button data-act="radar" aria-pressed="${S.radar}">${S.radar?"Hide radar":"Show radar"}</button>${S.radar?`<div class="radar"><p class="src">If the map stays blank, <a href="${RADAR()}" target="_blank" rel="noopener">open WeatherWise in a new tab</a>.</p><iframe src="${RADAR()}" title="WeatherWise radar" loading="lazy" referrerpolicy="no-referrer"></iframe></div>`:""}`},
+briefing:{t:"Today’s briefing",wide:1,h:()=>`<p class="src" style="margin-top:0">A short daily rundown of the day’s biggest stories, from 1440.</p><div class="acts" style="margin-top:10px"><a class="btn" href="https://join1440.com/newsletter/" target="_blank" rel="noopener">Open today’s briefing</a><button data-act="brief" aria-pressed="${S.brief}">${S.brief?"Hide preview":"Show preview"}</button></div>${S.brief?`<div class="radar"><iframe src="https://join1440.com/newsletter/" title="1440 Daily Digest" loading="lazy" referrerpolicy="no-referrer" style="height:520px"></iframe></div>`:""}<p class="src">If the preview stays blank, the site doesn’t allow embedding. Use the button instead.</p>`},
+silver:{t:"Silver spot",h:()=>{const p=+S.silver,lo=Math.min(SNAP.low,p),hi=Math.max(SNAP.hi,p),r=(p-lo)/(hi-lo||1);return `<div class="big">${money(p)}<small>per oz</small></div><div class="bar"><u style="left:${r*100}%"></u></div><div class="rng"><span>${money(lo)}</span><span>${money(hi)}</span></div><p class="src">${SNAP.ytd!=null?SNAP.ytd+"% so far this year. ":""}The bar shows where the price sits in its recent range. Prices as of ${SNAP.metalAt||SNAP.at}.</p>${S.edit?inp("silver",S.silver,"Override spot price"):""}`}},
+gold:{t:"Gold spot",c:"gold",h:()=>`<div class="big">${money(S.gold)}<small>per oz</small></div><p class="src">Gold/silver ratio: ${(S.gold/S.silver).toFixed(1)}. Prices as of ${SNAP.metalAt||SNAP.at}.</p>${S.edit?inp("gold",S.gold,"Override spot price"):""}`},
+stocks:{t:"Watchlist",wide:1,h:()=>`<div>${S.stocks.length?S.stocks.map((s,i)=>`<div class="row"><b>${esc(s.s)}</b><span>${s.p?money(s.p):"–"}</span><em class="${s.c<0?"dn":"up"}">${s.c>0?"+":""}${s.c}%</em><button data-act="rm" data-i="${i}" aria-label="Remove ${esc(s.s)}">×</button></div>`).join(""):'<p class="src">Add the tickers you follow, then press Refresh. Stock prices need a free Finnhub key, which you can add in Customize.</p>'}</div><form id="sf"><input name="s" placeholder="Ticker" required maxlength="8" aria-label="Ticker"><input name="p" type="number" step="0.01" placeholder="Price (optional)" aria-label="Price"><input name="c" type="number" step="0.01" placeholder="Change %" aria-label="Change percent"><button>Add</button></form>`},
+energy:{t:"Energy prices",wide:1,h:()=>{
+  const E=SNAP.en||{},rows=EN.filter(x=>S.en.includes(x.id)).map(x=>{const q=E[x.id];
+    if(!q)return `<div class="row en"><b>${x.n}</b><span>–</span><em></em><span></span></div>`;
+    return `<div class="row en"><b>${x.n}</b><span>$${q.v.toFixed(2)}<small> ${x.u}</small></span><em class="${q.c<0?"dn":"up"}">${q.c>0?"+":""}${q.c.toFixed(2)}</em><span class="d">${new Date(q.d+"T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span></div>`}).join("");
+  return (rows||'<p class="src" style="margin-top:0">No energy items selected. Open Customize to pick some.</p>')+(S.eia||SNAP.en?"":'<p class="src">Add a free EIA key in Customize, then press Refresh.</p>')+(S.edit?'<div class="l" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px">'+EN.map(x=>`<label><input type="checkbox" data-en="${x.id}" ${S.en.includes(x.id)?"checked":""}> ${x.n}</label>`).join("")+"</div>":"")+`<p class="src">Source: U.S. Energy Information Administration${SNAP.enAt?", loaded "+esc(SNAP.enAt):""}. Crude and natural gas are daily spot prices that run a day or two behind. Gasoline and diesel are weekly retail averages. Change is versus the previous reading.</p>`}},
+planner:{t:"Silver buy planner",h:()=>{const pr=S.silver*(1+S.prem/100),oz=S.budget/pr;return `<label class="f">Budget ($)<input type="number" min="0" value="${S.budget}" data-k="budget"></label><label class="f">Assumed dealer premium (%)<input type="number" min="0" step="0.5" value="${S.prem}" data-k="prem"></label><div class="big">${oz.toFixed(1)} oz<small>at ${money(pr)} per oz</small></div><p class="src">Premiums differ by dealer and product. Compare live prices before you buy.</p>`}},
+countdown:{t:"Countdown",h:()=>{const c=S.cd,d=c.date?Math.ceil((new Date(c.date+"T00:00")-new Date().setHours(0,0,0,0))/864e5):null;return `<div class="big">${d===null?"–":d}<small>${d===1?"day":"days"}${c.label?" until "+esc(c.label):""}</small></div><label class="f">Event<input type="text" value="${esc(c.label)}" data-cd="label"></label><label class="f">Date<input type="date" value="${c.date}" data-cd="date"></label>`}},
+notes:{t:"Notes",h:()=>`<textarea data-n aria-label="Notes" placeholder="Jot something down. It stays in this browser.">${esc(S.notes)}</textarea>`},
+verse:{t:"Verse of the day",wide:1,h:()=>{const v=SNAP.votd;return (v?`<p class="vs">${esc(v.t)}</p><p class="src" style="margin-top:6px"><b>${esc(v.r)}</b>${v.v?" ("+esc(v.v)+")":""}</p>`:'<p class="src" style="margin-top:0">Press Refresh to load today’s verse.</p>')+`<div class="acts" style="margin-top:10px"><a class="btn" href="https://www.verseoftheday.com/" target="_blank" rel="noopener">Read today’s thoughts and prayer</a><button data-act="vpv" aria-pressed="${S.vpv}">${S.vpv?"Hide preview":"Show preview"}</button></div>${S.vpv?`<div class="radar"><iframe src="https://www.verseoftheday.com/" title="Verse of the Day" loading="lazy" referrerpolicy="no-referrer" style="height:520px"></iframe></div>`:""}${v?`<p class="src">Loaded ${esc(SNAP.votdAt||"")} from OurManna. It may be a different verse than the one on verseoftheday.com.</p>`:""}`}},
+nws:{t:"Severe weather alerts",wide:1,h:()=>{const a=SNAP.nws;if(!a)return '<p class="src" style="margin-top:0">Press Refresh to check for active National Weather Service alerts at your location.</p>';return (a.length?a.map(x=>`<div class="al"><b>${esc(x.e)}</b> ${esc(x.s||"")}<p class="src" style="margin:2px 0 0">${esc(x.h||"")}${x.x?" Until "+esc(x.x)+".":""}</p></div>`).join(""):'<p style="margin:0">No active alerts for '+esc(S.loc.name)+'.</p>')+'<p class="src">National Weather Service, checked '+esc(SNAP.nwsAt||"")+'. US locations only.</p>'}},
+alerts:{t:"Price alerts",h:()=>{const p=+S.silver,lo=parseFloat(S.alert.lo),hi=parseFloat(S.alert.hi),hit=[];if(lo>0&&p<=lo)hit.push("Silver is at or below your "+money(lo)+" target.");if(hi>0&&p>=hi)hit.push("Silver is at or above your "+money(hi)+" target.");return `${hit.length?`<p class="hit">${hit.join(" ")}</p>`:`<p class="src" style="margin-top:0">No alerts. Silver is ${money(p)}.</p>`}<label class="f">Alert at or below ($)<input type="number" step="0.01" min="0" value="${S.alert.lo}" data-al="lo"></label><label class="f">Alert at or above ($)<input type="number" step="0.01" min="0" value="${S.alert.hi}" data-al="hi"></label><p class="src">Checked each time you press Refresh.</p>`}},
+stack:{t:"Silver stack",wide:1,h:()=>{const oz=S.stack.reduce((a,x)=>a+x.oz,0),cost=S.stack.reduce((a,x)=>a+x.cost,0),val=oz*S.silver,g=val-cost;return `<div class="big">${oz.toFixed(2)} oz<small>worth ${money(val)}</small></div>${oz?`<p class="src ${g<0?"dn":"up"}">${g<0?"Down":"Up"} ${money(Math.abs(g))} (${(cost?g/cost*100:0).toFixed(1)}%) on ${money(cost)} paid. Average cost ${money(cost/oz)} per oz.</p>`:'<p class="src">Log each purchase to track your ounces and what you paid.</p>'}<div>${S.stack.map((x,i)=>`<div class="row"><b>${x.oz} oz</b><span>${money(x.cost)}</span><em>${esc(x.d)}${x.dl?", "+esc(x.dl):""}</em><button data-act="rms" data-i="${i}" aria-label="Remove purchase">×</button></div>`).join("")}</div><form id="stf"><input name="oz" type="number" step="0.01" min="0" placeholder="Ounces" required><input name="cost" type="number" step="0.01" min="0" placeholder="Total paid ($)" required><input name="dl" placeholder="Dealer"><button>Add</button></form>`}},
+dates:{t:"Key dates",h:()=>{const t0=new Date().setHours(0,0,0,0),L=S.dates.map((x,i)=>({...x,i,n:Math.ceil((new Date(x.d+"T00:00")-t0)/864e5)})).sort((a,b)=>a.n-b.n);return `<div>${L.length?L.map(x=>`<div class="row"><b>${esc(x.l)}</b><span>${new Date(x.d+"T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span><em>${x.n<0?"past":x.n===0?"today":x.n+" days"}</em><button data-act="rmd" data-i="${x.i}" aria-label="Remove ${esc(x.l)}">×</button></div>`).join(""):'<p class="src">Add dates you want to keep an eye on.</p>'}</div><form id="df"><input name="l" placeholder="Event" required><input name="d" type="date" required><button>Add</button></form>`}},
+todo:{t:"To-do",h:()=>`<div>${S.todos.map((x,i)=>`<div class="row td"><label><input type="checkbox" data-td="${i}" ${x.done?"checked":""}><span class="${x.done?"dn2":""}">${esc(x.t)}</span></label><button data-act="rmt" data-i="${i}" aria-label="Remove task">×</button></div>`).join("")||'<p class="src">Nothing on the list yet.</p>'}</div><form id="tf"><input name="t" placeholder="Add a task" required><button>Add</button></form>`},
+search:{t:"Google search",wide:1,h:()=>`<form class="sr" action="https://www.google.com/search" method="get" target="_blank"><input name="q" placeholder="Search Google" aria-label="Search Google" required style="flex:3 1 200px"><button>Search</button></form>`},
+claude:{t:"Claude",h:()=>`<p class="src" style="margin-top:0">Ask a question or pick up where you left off.</p><a class="btn" href="https://claude.ai" target="_blank" rel="noopener">Open Claude</a>`},
+clock:{t:"Local time",h:()=>`<div class="big" id="clk"></div>`}
+};
+function render(){
+  const vis=S.order.filter(k=>!S.hidden.includes(k));
+  $("#g").innerHTML=vis.map(k=>`<section class="w ${W[k].wide?"wide":""} ${W[k].c||""}" data-k="${k}"><header><h2>${S.edit?`<span class="grab" aria-label="Drag to move ${W[k].t}" title="Drag to move">⋮⋮</span>`:""}${W[k].t}</h2>${S.edit?`<span><button data-act="up" data-k="${k}" aria-label="Move ${W[k].t} earlier">↑</button><button data-act="dn" data-k="${k}" aria-label="Move ${W[k].t} later">↓</button></span>`:""}</header>${W[k].h()}</section>`).join("")||'<p class="src">Nothing is showing. Open Customize and pick a few cards.</p>';
+  $("#p").hidden=!S.edit;
+  $("#p .l").innerHTML=S.order.map(k=>`<label><input type="checkbox" data-t="${k}" ${S.hidden.includes(k)?"":"checked"}>${W[k].t}</label>`).join("");
+  $("#ed").textContent=S.edit?"Done":"Customize";$("#ed").setAttribute("aria-expanded",S.edit);
+  tick();
+}
+function tick(){
+  const n=new Date(),h=n.getHours();
+  $("#hd").textContent=(h<12?"Good morning":h<18?"Good afternoon":"Good evening");
+  $("#sub").textContent=n.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+  const c=$("#clk");if(c)c.textContent=n.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+}
+function mv(k,d){const v=S.order.filter(x=>!S.hidden.includes(x)),j=v[v.indexOf(k)+d];if(!j)return;const a=S.order.indexOf(k),b=S.order.indexOf(j);[S.order[a],S.order[b]]=[S.order[b],S.order[a]]}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="ed"){S.edit=!S.edit;render()}
+  else if(b.id==="rf"){refresh()}
+  else if(b.id==="bgdir"){bgfolder()}
+  else if(b.id==="bgoff"){S.dirOn=false;BG.files=[];BG.url=null;save();look();say("Using online pictures.")}
+  else if(b.id==="bk"){S.theme=S.theme==="black"?"auto":"black";save();look()}
+  else if(b.dataset.act==="radar"){S.radar=!S.radar;render()}
+  else if(b.dataset.act==="brief"){S.brief=!S.brief;render()}
+  else if(b.dataset.act==="vpv"){S.vpv=!S.vpv;render()}
+  else if(b.dataset.act==="rms"){S.stack.splice(+b.dataset.i,1);save();render()}
+  else if(b.dataset.act==="rmd"){S.dates.splice(+b.dataset.i,1);save();render()}
+  else if(b.dataset.act==="rmt"){S.todos.splice(+b.dataset.i,1);save();render()}
+  else if(b.dataset.act==="up"||b.dataset.act==="dn"){mv(b.dataset.k,b.dataset.act==="up"?-1:1);save();render()}
+  else if(b.dataset.act==="rm"){S.stocks.splice(+b.dataset.i,1);save();render()}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="theme"){S.theme=t.value;save();look();return}
+  else if(t.id==="ph"){S.photo=t.checked;save();look();return}
+  else if(t.id==="urls"){S.urls=t.value;save();look();return}
+  else if(t.id==="loc"){const q=t.value.trim();if(q&&q!==S.loc.name)geo(q);return}
+  else if(t.id==="key"){S.key=t.value.trim();save();return}
+  else if(t.id==="eiakey"){S.eia=t.value.trim();save();return}
+  else if(t.dataset.t){S.hidden=t.checked?S.hidden.filter(x=>x!==t.dataset.t):[...S.hidden,t.dataset.t]}
+  else if(t.dataset.k){const v=parseFloat(t.value);if(isNaN(v)||v<0)return;S[t.dataset.k]=v}
+  else if(t.dataset.cd){S.cd[t.dataset.cd]=t.value}
+  else if(t.dataset.en){S.en=t.checked?[...S.en,t.dataset.en]:S.en.filter(x=>x!==t.dataset.en)}
+  else if(t.dataset.al){S.alert[t.dataset.al]=t.value}
+  else if(t.dataset.td!==undefined){S.todos[+t.dataset.td].done=t.checked}
+  else return;
+  save();render();
+});
+document.addEventListener("input",e=>{if(e.target.dataset.n!==undefined){S.notes=e.target.value;save()}});
+document.addEventListener("submit",e=>{
+  const id=e.target.id,f=new FormData(e.target),v=k=>String(f.get(k)||"").trim();
+  if(id==="stf"){e.preventDefault();const oz=parseFloat(v("oz")),cost=parseFloat(v("cost"));if(!(oz>0)||!(cost>=0))return;S.stack.push({oz,cost,dl:v("dl"),d:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})})}
+  else if(id==="df"){e.preventDefault();if(!v("l")||!v("d"))return;S.dates.push({l:v("l"),d:v("d")})}
+  else if(id==="tf"){e.preventDefault();if(!v("t"))return;S.todos.push({t:v("t"),done:false})}
+  else return;
+  save();render();
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="sf")return;e.preventDefault();
+  const f=new FormData(e.target),s=String(f.get("s")).trim().toUpperCase(),p=parseFloat(f.get("p")),c=parseFloat(f.get("c"))||0;
+  if(!s)return;S.stocks.push({s,p:p||0,c});save();render();
+});
+let drag=null;
+const secs=()=>[...$("#g").children].filter(x=>x.tagName==="SECTION");
+const seq=()=>secs().sort((a,b)=>(+a.style.order||0)-(+b.style.order||0)).map(x=>x.dataset.k);
+document.addEventListener("pointerdown",e=>{
+  const h=e.target.closest(".grab");if(!h)return;
+  const sec=h.closest("section");secs().forEach((x,i)=>x.style.order=i);
+  drag={k:sec.dataset.k,sec};sec.classList.add("lift");e.preventDefault();
+});
+document.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-70)scrollBy(0,14);
+  const el=document.elementFromPoint(e.clientX,e.clientY),t=el&&el.closest("section.w");
+  if(!t||t===drag.sec)return;
+  const r=t.getBoundingClientRect(),before=(e.clientY-r.top)/r.height+(e.clientX-r.left)/r.width<1,cur=seq();
+  cur.splice(cur.indexOf(drag.k),1);const to=cur.indexOf(t.dataset.k);cur.splice(before?to:to+1,0,drag.k);
+  cur.forEach((k,i)=>$('#g section[data-k="'+k+'"]').style.order=i);
+});
+function endDrag(){
+  if(!drag)return;
+  const vis=seq(),slots=[];S.order.forEach((k,i)=>{if(vis.includes(k))slots.push(i)});
+  slots.forEach((i,j)=>S.order[i]=vis[j]);drag=null;save();render();
+}
+document.addEventListener("pointerup",endDrag);document.addEventListener("pointercancel",endDrag);
+const BG={dir:null,files:[],url:null,last:-1};
+const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open("dash-bg",1);r.onupgradeneeded=()=>r.result.createObjectStore("h");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const hput=async h=>{const d=await idb();return new Promise((ok,no)=>{const t=d.transaction("h","readwrite");t.objectStore("h").put(h,"dir");t.oncomplete=ok;t.onerror=()=>no(t.error)})};
+const hget=async()=>{const d=await idb();return new Promise((ok,no)=>{const q=d.transaction("h").objectStore("h").get("dir");q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)})};
+async function loadDir(h,ask){
+  if(!h)return false;
+  let p=await h.queryPermission({mode:"read"});
+  if(p!=="granted"&&ask)p=await h.requestPermission({mode:"read"});
+  if(p!=="granted")return false;
+  const f=[];for await(const [n,e] of h.entries())if(e.kind==="file"&&/\.(jpe?g|png|webp|gif|avif)$/i.test(n))f.push(e);
+  BG.dir=h;BG.files=f;return f.length>0;
+}
+async function pick(){
+  const n=BG.files.length;if(!n)return;
+  let i=Math.floor(Math.random()*n);if(n>1&&i===BG.last)i=(i+1)%n;BG.last=i;
+  const file=await BG.files[i].getFile();if(BG.url)URL.revokeObjectURL(BG.url);BG.url=URL.createObjectURL(file);
+}
+async function bgfolder(){
+  if(!window.showDirectoryPicker){say("This browser can’t open folders. Use Chrome or Edge, or paste photo links instead.");return}
+  try{
+    const h=await showDirectoryPicker({id:"dashbg",mode:"read"});await hput(h);
+    if(!await loadDir(h,true)){say("No pictures found in that folder.");return}
+    S.photo=true;S.dirOn=true;save();await pick();look();say("Using "+BG.files.length+" pictures from "+h.name+".");
+  }catch(e){say("The folder wasn’t opened.")}
+}
+const urlList=()=>(S.urls||"").split("\n").map(x=>x.trim()).filter(Boolean);
+function look(){
+  const L=urlList(),u=!S.photo?"":BG.url||(S.dirOn?"":L.length?L[S.seed%L.length]:"https://picsum.photos/seed/"+S.seed+"/1920/1080");
+  if(S.theme==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",S.theme);
+  document.body.classList.toggle("photo",!!S.photo);
+  document.body.style.backgroundImage=u?`linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),url("${u.replace(/"/g,"%22")}")`:"";
+  $("#bk").setAttribute("aria-pressed",S.theme==="black");$("#theme").value=S.theme;$("#ph").checked=!!S.photo;$("#urls").value=S.urls||"";
+}
+const say=t=>{$("#st").textContent=t};
+const J=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});
+const wc=c=>c===0?"Clear":c<3?"Partly cloudy":c===3?"Overcast":c<50?"Fog":c<60?"Drizzle":c<70?"Rain":c<80?"Snow":c<86?"Showers":c<90?"Snow showers":"Thunderstorms";
+async function geo(q){
+  say("Looking up "+q+"…");
+  try{const r=await J("https://geocoding-api.open-meteo.com/v1/search?count=1&name="+encodeURIComponent(q)),g=r.results&&r.results[0];
+    if(!g){say("Couldn’t find that place. Try a nearby city.");return}
+    S.loc={name:g.name+(g.admin1?", "+g.admin1:""),lat:g.latitude,lon:g.longitude};save();render();$("#loc").value=S.loc.name;await refresh();
+  }catch(e){say("Couldn’t look up that place. Check your internet connection.")}
+}
+async function refresh(){
+  const b=$("#rf");b.disabled=true;say("Refreshing…");const bad=[];
+  if(S.photo&&S.dirOn&&!BG.files.length){try{const h=await hget();if(h)await loadDir(h,true)}catch(e){}}
+  const t=new Date().toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+  await Promise.all([
+    (async()=>{try{
+      const d=await J(`https://api.open-meteo.com/v1/forecast?latitude=${S.loc.lat}&longitude=${S.loc.lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=fahrenheit&timezone=auto&forecast_days=7`);
+      SNAP.wx={now:Math.round(d.current.temperature_2m),txt:wc(d.current.weather_code),days:d.daily.time.map((x,i)=>[new Date(x+"T12:00").toLocaleDateString("en-US",{weekday:"short"}),Math.round(d.daily.temperature_2m_max[i]),Math.round(d.daily.temperature_2m_min[i]),d.daily.precipitation_probability_max[i]||0])};SNAP.wxAt=t;
+    }catch(e){bad.push("weather")}})(),
+    (async()=>{try{
+      const [s,g]=await Promise.all([J("https://api.gold-api.com/price/XAG"),J("https://api.gold-api.com/price/XAU")]);
+      if(!(s.price>0&&g.price>0))throw new Error("bad data");
+      S.silver=+s.price.toFixed(2);S.gold=+g.price.toFixed(2);SNAP.metalAt=t;SNAP.ytd=null;
+    }catch(e){bad.push("silver and gold")}})(),
+    (async()=>{
+      if(!S.stocks.length)return;
+      if(!S.key){bad.push("stocks (add a Finnhub key in Customize)");return}
+      try{await Promise.all(S.stocks.map(async x=>{
+        const q=await J(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(x.s)}&token=${encodeURIComponent(S.key)}`);
+        if(q.c>0){x.p=q.c;x.c=+(q.dp||0).toFixed(2)}
+      }))}catch(e){bad.push("stocks")}
+    })(),
+    (async()=>{try{
+      const d=await J(`https://api.weather.gov/alerts/active?point=${(+S.loc.lat).toFixed(4)},${(+S.loc.lon).toFixed(4)}`);
+      SNAP.nws=d.features.map(f=>{const p=f.properties,e=p.ends||p.expires;return{e:p.event,s:p.severity,h:p.headline,x:e?new Date(e).toLocaleString("en-US",{weekday:"short",hour:"numeric",minute:"2-digit"}):""}});SNAP.nwsAt=t;
+    }catch(e){bad.push("severe weather alerts (US locations only)")}})(),
+    (async()=>{try{
+      const d=await J("https://beta.ourmanna.com/api/v1/get/?format=json&order=daily"),x=d.verse&&d.verse.details;
+      if(!x||!x.text)throw new Error("bad data");
+      SNAP.votd={t:x.text,r:x.reference,v:x.version};SNAP.votdAt=t;
+    }catch(e){bad.push("verse of the day")}})(),
+    (async()=>{
+      if(!S.eia){bad.push("energy prices (add a free EIA key in Customize)");return}
+      const items=EN.filter(x=>S.en.includes(x.id));if(!items.length)return;
+      SNAP.en=SNAP.en||{};let ok=0;
+      await Promise.all(items.map(async x=>{try{
+        const q=new URLSearchParams([["api_key",S.eia],["frequency",x.f],["data[0]","value"],["facets[series][]",x.s],["sort[0][column]","period"],["sort[0][direction]","desc"],["length","2"]]);
+        const d=await J("https://api.eia.gov/v2/"+x.r+"/data/?"+q),a=d.response.data.map(r=>({d:r.period,v:parseFloat(r.value)})).filter(r=>r.v>0);
+        if(!a.length)throw new Error("none");
+        SNAP.en[x.id]={v:a[0].v,c:a[1]?a[0].v-a[1].v:0,d:a[0].d};ok++;
+      }catch(e){}}));
+      if(ok)SNAP.enAt=t;
+      if(ok<items.length)bad.push(ok?"some energy prices":"energy prices");
+    })()
+  ]);
+  S.snap={wx:SNAP.wx,wxAt:SNAP.wxAt,metalAt:SNAP.metalAt,ytd:SNAP.ytd,nws:SNAP.nws,nwsAt:SNAP.nwsAt,votd:SNAP.votd,votdAt:SNAP.votdAt,en:SNAP.en,enAt:SNAP.enAt};if(S.photo){if(S.dirOn&&BG.files.length)await pick();else S.seed=urlList().length?S.seed+1:Math.floor(Math.random()*1e6)}save();render();look();
+  say(bad.length?"Couldn’t refresh: "+bad.join("; ")+". Everything else updated at "+t+".":"Updated at "+t+".");
+  b.disabled=false;
+}
+render();look();$("#loc").value=S.loc.name;$("#key").value=S.key||"";$("#eiakey").value=S.eia||"";setInterval(tick,30000);
+if(!window.showDirectoryPicker){const b=$("#bgdir");if(b&&b.parentElement){const row=b.parentElement;if(row.nextElementSibling)row.nextElementSibling.style.display="none";row.style.display="none"}}
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+if(S.dirOn)hget().then(h=>h&&loadDir(h,false)).then(ok=>ok&&pick()).then(look).catch(()=>{});
+</script>
+</body>
+</html>
